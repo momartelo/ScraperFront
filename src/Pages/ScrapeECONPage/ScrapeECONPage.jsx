@@ -1,11 +1,18 @@
 import styles from "./ScrapeECONPage.module.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 const ScrapeECONPage = () => {
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedUrl, setSelectedUrl] = useState("zingueria"); // URL por defecto
+  const [selectedUrl, setSelectedUrl] = useState(""); // URL por defecto
+  const [search, setSearch] = useState("");
+  const [filterResults, setFilterResults] = useState([]);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  const navigate = useNavigate();
 
   // Opciones de scraping
   const urls = {
@@ -35,22 +42,42 @@ const ScrapeECONPage = () => {
     zingueria: "https://econ.ar/productos/zingueria/",
   };
 
+  useEffect(() => {
+    console.log(result);
+    let filtered = result.filter((r) => {
+      return r.nombre.toLowerCase().includes(search.toLowerCase());
+    });
+
+    filtered = filtered.slice().sort((a, b) => {
+      return (a.nombre || "").localeCompare(b.nombre || "");
+    });
+
+    setFilterResults(filtered);
+  }, [search, result]);
+
+  const handleReset = async () => {
+    navigate(0);
+  };
+
   const handleScrape = async () => {
     setLoading(true);
+    setAlertMessage("");
     try {
       const response = await axios.get(
         `http://localhost:3020/api/scraper/${selectedUrl}`
       );
-      alert(response.data.message); // Mostrar mensaje de éxito
+      // alert(response.data.message);
+      setAlertMessage(response.data.message);
 
       // Solicitar los datos
       const jsonResponse = await axios.get(
         `http://localhost:3020/json/${response.data.fileName}`
       );
       setResult(jsonResponse.data);
+      setFilterResults(jsonResponse.data);
     } catch (error) {
       console.error("Error en el scraping:", error);
-      alert("Error al realizar el scraping."); // Mostrar mensaje de error
+      setAlertMessage("Error al realizar el scraping."); // Mostrar mensaje de error
     } finally {
       setLoading(false);
     }
@@ -58,33 +85,84 @@ const ScrapeECONPage = () => {
 
   return (
     <div className={styles.containerPage}>
+      {alertMessage && ( // Mostrar el Alert solo si hay un mensaje
+        <Alert
+          variant="outlined"
+          severity="success"
+          onClose={() => setAlertMessage("")}
+        >
+          {alertMessage}
+        </Alert>
+      )}
+      <div className={styles.containerTitle}>
+        <h1>Extraccion de datos</h1>
+      </div>
       <div className={styles.containerButtonScrap}>
         <select
           onChange={(e) => setSelectedUrl(e.target.value)}
           value={selectedUrl}
+          className={styles.selectScrap}
         >
+          <option value="" disabled>
+            Elija categoría
+          </option>
           {Object.keys(urls).map((key) => (
             <option key={key} value={key}>
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </option>
           ))}
         </select>
-        <button onClick={handleScrape} disabled={loading}>
+        <button
+          onClick={handleScrape}
+          disabled={loading}
+          className={styles.buttonScrap}
+        >
           {loading ? "Scraping..." : "Scrape"}
         </button>
+        <Link to={"/"} className={styles.buttonHome}>
+          Volver
+        </Link>
+        <button
+          onClick={handleReset}
+          disabled={loading}
+          className={styles.buttonReset}
+        >
+          Reset
+        </button>
+      </div>
+      <div className={`${styles.searchContainer}`}>
+        <input
+          type="search"
+          className={styles.formControl}
+          placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <div className={styles.containerIcon}>
+          <img src="../../../public/img/buscarRelleno.png" alt="" />
+        </div>
       </div>
 
-      {result && (
+      {filterResults.length > 0 ? (
         <div className={styles.containerScraping}>
-          <h2>Resultados del Scraping:</h2>
-          <ul>
-            {result.map((producto, index) => (
-              <li key={index}>
-                {producto.nombre}: {producto.precio}
+          <div className={styles.containerTitleScraping}>
+            <h2>Resultados del Scraping:</h2>
+          </div>
+          <ul className={styles.containerDataScraping}>
+            {filterResults.map((producto, index) => (
+              <li key={index} className={styles.containerProductScraping}>
+                <p>{producto.nombre}</p>
+                <p>${producto.precio}</p>
               </li>
             ))}
           </ul>
         </div>
+      ) : (
+        result && (
+          <div className={styles.containerNoDataScraping}>
+            <h2>No hay productos disponibles.</h2>
+          </div>
+        )
       )}
     </div>
   );
