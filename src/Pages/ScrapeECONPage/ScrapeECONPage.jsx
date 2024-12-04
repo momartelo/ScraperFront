@@ -64,7 +64,7 @@ const ScrapeECONPage = () => {
     setAlertMessage("");
     try {
       const response = await axios.get(
-        `http://localhost:3020/api/scraper/${selectedUrl}`
+        `http://localhost:3020/api/scraper/ECON/${selectedUrl}`
       );
       // alert(response.data.message);
       setAlertMessage(response.data.message);
@@ -95,7 +95,7 @@ const ScrapeECONPage = () => {
         </Alert>
       )}
       <div className={styles.containerTitle}>
-        <h1>Extraccion de datos</h1>
+        <h1>Extraccion de datos ECON</h1>
       </div>
       <div className={styles.containerButtonScrap}>
         <select
@@ -119,9 +119,7 @@ const ScrapeECONPage = () => {
         >
           {loading ? "Scraping..." : "Scrape"}
         </button>
-        <Link to={"/"} className={styles.buttonHome}>
-          Volver
-        </Link>
+
         <button
           onClick={handleReset}
           disabled={loading}
@@ -129,6 +127,9 @@ const ScrapeECONPage = () => {
         >
           Reset
         </button>
+        <Link to={"/"} className={styles.buttonHome}>
+          Volver
+        </Link>
       </div>
       <div className={`${styles.searchContainer}`}>
         <input

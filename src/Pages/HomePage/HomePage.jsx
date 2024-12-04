@@ -10,9 +10,49 @@ const HomePage = () => {
         <h1>Home Page de Scraping de Precios</h1>
       </div>
       <div className={styles.containerAnchor}>
-        <p>&#10148;</p>
-        <p>Si desea extraer los precios de Econ</p>
-        <Link to={"/pageECON"}>Ir a la pagina</Link>
+        <div className={styles.anchor}>
+          <p>&#10148;</p>
+          <p>Econ</p>
+          <Link className={styles.buttonScrapping} to={"/pageECON"}>
+            Scraping
+          </Link>
+          <Link
+            className={styles.buttonData}
+            to={"/graficos/productosECON_obra_gruesa_"}
+          >
+            Ver datos
+          </Link>
+        </div>
+        <div className={styles.anchor}>
+          <p>&#10148;</p>
+          <p>Mercado Libre</p>
+          <Link className={styles.buttonScrapping} to={"/pageMLSearch"}>
+            Scraping
+          </Link>
+          <Link className={styles.buttonData} to={"/pageMLSearch"}>
+            Ver datos
+          </Link>
+        </div>
+        <div className={styles.anchor}>
+          <p>&#10148;</p>
+          <p>Cemento</p>
+          <Link className={styles.buttonScrapping} to={"/cementos"}>
+            Scraping
+          </Link>
+          <Link className={styles.buttonData} to={"/graficos/precioCemento"}>
+            Ver datos
+          </Link>
+        </div>
+        <div className={styles.anchor}>
+          <p>&#10148;</p>
+          <p>Hormigon</p>
+          <Link className={styles.buttonScrapping} to={"/hormigon"}>
+            Scraping
+          </Link>
+          <Link className={styles.buttonData} to={"/graficos/precioHormigones"}>
+            Ver datos
+          </Link>
+        </div>
       </div>
     </div>
   );
