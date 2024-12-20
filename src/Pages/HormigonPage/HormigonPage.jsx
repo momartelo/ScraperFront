@@ -27,14 +27,14 @@ const HormigonPage = () => {
       const response = await axios.get(
         `http://localhost:3020/api/scraper/hormigon`
       );
-      console.log(response);
       setAlertMessage(response.data.message);
 
-      //   const jsonResponse = await axios.get(
-      //     `http://localhost:3020/json/${response.data.filename}`
-      //   );
+      const jsonResponse = await axios.get(
+        `http://localhost:3020/json/${response.data.fileName}`
+      );
       //   console.log(jsonResponse);
-      setResult(response.data.productos);
+      // setResult(response.data.productos);
+      setResult(jsonResponse.data);
     } catch (error) {
       console.error("Error en el scraping:", error);
       setAlertMessage("Error al realizar el scraping.");

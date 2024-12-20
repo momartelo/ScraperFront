@@ -6,43 +6,124 @@
 }
 
 .containerPage {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1320px;
-  padding: 1rem;
-  align-items: center;
+  padding: 20px;
 }
 
 .containerTitle {
+  margin-bottom: 20px;
+}
+
+.subcontainerTitle {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   column-gap: 1rem;
 }
 
+.gridItem {
+  margin-bottom: 30px;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas por defecto */
+  row-gap: 5px;
+  column-gap: 10px;
+}
+
+.gridContainer.noProveedor {
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas si no hay proveedor */
+}
+
+.proveedor {
+  /* grid-column: 1 / -1; */
+  display: flex;
+  text-align: center;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .datesRow,
+.pricesRow {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(100px, 1fr)
+  ); 
+  gap: 10px;
+} */
+
+.dateColumn,
+.priceColumn {
+  text-align: center;
+}
+
+.dateColumn {
+  grid-column: 2 / 3; /* Por defecto en la columna de Fecha */
+}
+
+.dateColumn.noProveedor {
+  grid-column: 1 / 2; /* Si no hay Proveedor, mueve Fecha a la primera columna */
+}
+
+.priceColumn {
+  grid-column: 3 / 4; /* Por defecto en la columna de Precio */
+}
+
+.priceColumn.noProveedor {
+  grid-column: 2 / 3; /* Si no hay Proveedor, mueve Precio a la segunda columna */
+}
+
+.datesRow {
+  /* margin-top: 10px; */
+  font-weight: normal; /* No negrita para las fechas */
+}
+
+/* .pricesRow {
+  margin-top: 10px;
+} */
+
+h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .buttonHome {
-  margin-left: auto;
-}
-
-.containerData {
+  text-decoration: none;
+  height: 40px;
+  background-color: #4caf50;
+  color: white;
+  padding: 0 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 750px;
-  margin: 1rem 0;
+  align-items: center;
 }
 
-.containerItem {
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  margin: 1rem 0;
+.buttonHome:hover {
+  background-color: #45a049;
 }
 
-.containerItem > h3 {
-  text-align: center;
-  margin-bottom: 0.5rem;
+.containerTitleColumn1 {
+  grid-column: 1 / 2;
 }
 
-tbody tr td {
-  text-align: center;
+.containerTitleColumn1Hidden {
+  display: none; /* Oculta la columna de empresa si no hay datos */
+}
+
+.containerTitleColumn2 {
+  grid-column: 2 / 3;
+}
+
+.containerTitleColumn2Shifted {
+  grid-column: 1 / 2; /* Ajusta la columna Fecha para ocupar el lugar de Empresa */
+}
+.containerTitleColumn3 {
+  grid-column: 3 / 4;
+}
+.containerTitleColumn3Shifted {
+  grid-column: 2 / 3; /* Ajusta la columna Precio para ocupar el lugar de Empresa */
 }

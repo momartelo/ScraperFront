@@ -16,10 +16,7 @@ const HomePage = () => {
           <Link className={styles.buttonScrapping} to={"/pageECON"}>
             Scraping
           </Link>
-          <Link
-            className={styles.buttonData}
-            to={"/graficos/productosECON_obra_gruesa_"}
-          >
+          <Link className={styles.buttonData} to={"/graficos/ECON"}>
             Ver datos
           </Link>
         </div>
@@ -50,6 +47,16 @@ const HomePage = () => {
             Scraping
           </Link>
           <Link className={styles.buttonData} to={"/graficos/precioHormigones"}>
+            Ver datos
+          </Link>
+        </div>
+        <div className={styles.anchor}>
+          <p>&#10148;</p>
+          <p>Acero</p>
+          <Link className={styles.buttonScrapping} to={"/acero"}>
+            Scraping
+          </Link>
+          <Link className={styles.buttonData} to={"/graficos/precioAcero"}>
             Ver datos
           </Link>
         </div>

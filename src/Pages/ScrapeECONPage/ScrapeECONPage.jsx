@@ -18,8 +18,8 @@ const ScrapeECONPage = () => {
   const urls = {
     aceros: "https://econ.ar/productos/aceros/",
     aceros_Inoxidables: "https://econ.ar/productos/aceros-inoxidables/",
-    aislaciones: "https://econ.ar/productos/aislaciones",
-    amoblamientos: "https://econ.ar/productos/amoblamiento",
+    aislaciones: "https://econ.ar/productos/aislaciones/",
+    amoblamientos: "https://econ.ar/productos/amoblamiento/",
     carpinterias: "https://econ.ar/productos/carpinterias/",
     construccion_en_seco: "https://econ.ar/productos/construccion-en-seco/",
     construcciones_especiales:
@@ -27,31 +27,28 @@ const ScrapeECONPage = () => {
     electricidad: "https://econ.ar/productos/electricidad-e-iluminacion/",
     electro: "https://econ.ar/productos/Electro/",
     ferreteria: "https://econ.ar/productos/ferreteria/",
-    fibra_de_vidrio: "https://econ.ar/productos/fibra-de-vidrio",
+    fibra_de_vidrio: "https://econ.ar/productos/fibra-de-vidrio/",
     jardineria: "https://econ.ar/productos/jardineria-y-camping/",
     maderas: "https://econ.ar/productos/maderas/",
-    marmoles_granitos: "https://econ.ar/productos/marmoles-y-granitos",
+    marmoles_granitos: "https://econ.ar/productos/marmoles-y-granitos/",
     obra_gruesa: "https://econ.ar/productos/obra-gruesa/",
     pinturas: "https://econ.ar/productos/pinturas/",
     pisos_y_revestimientos: "https://econ.ar/productos/pisos-y-revestimientos/",
     refrigeracion: "https://econ.ar/productos/refrigeracion/",
     sanitarios_y_griferias: "https://econ.ar/productos/sanitarios-y-griferias/",
-    techos: "https://econ.ar/productos/techos",
+    techos: "https://econ.ar/productos/techos/",
     vidrios: "https://econ.ar/productos/vidrios/",
-    teseria: "https://econ.ar/productos/yeseria/",
+    yeseria: "https://econ.ar/productos/yeseria/",
     zingueria: "https://econ.ar/productos/zingueria/",
   };
 
   useEffect(() => {
-    console.log(result);
     let filtered = result.filter((r) => {
       return r.nombre.toLowerCase().includes(search.toLowerCase());
     });
-
     filtered = filtered.slice().sort((a, b) => {
       return (a.nombre || "").localeCompare(b.nombre || "");
     });
-
     setFilterResults(filtered);
   }, [search, result]);
 
@@ -73,7 +70,8 @@ const ScrapeECONPage = () => {
       const jsonResponse = await axios.get(
         `http://localhost:3020/json/${response.data.fileName}`
       );
-      setResult(jsonResponse.data);
+
+      setResult(response.data.productos);
       setFilterResults(jsonResponse.data);
     } catch (error) {
       console.error("Error en el scraping:", error);

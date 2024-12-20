@@ -6,6 +6,8 @@ import ScrapeMLSearchPage from "./Pages/ScrapeMLSearchPage/ScrapeMLSearchPage";
 import CementosPage from "./Pages/CementosPage/CementosPage";
 import DataPage from "./Pages/DataPage/DataPage";
 import HormigonPage from "./Pages/HormigonPage/HormigonPage";
+import AcerosPage from "./Pages/AcerosPage/AcerosPage";
+import DataECONPage from "./Pages/ScrapeECONPage/DataECONPage";
 
 function AppRouter() {
   return (
@@ -16,6 +18,8 @@ function AppRouter() {
       <Route path="/cementos" element={<CementosPage />} />
       <Route path="/hormigon" element={<HormigonPage />} />
       <Route path="/graficos/:category" element={<DataPage />} />
+      <Route path="/graficos/ECON" element={<DataECONPage />} />
+      <Route path="/acero" element={<AcerosPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

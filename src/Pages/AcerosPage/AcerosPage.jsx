@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import styles from "./CementosPage.module.css";
+import styles from "./AcerosPage.module.css";
+import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 
-const CementosPage = () => {
+const AcerosPage = () => {
+  const [diameter, setDiameter] = useState("8");
   const [result, setResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -25,22 +26,26 @@ const CementosPage = () => {
     setAlertMessage("");
     try {
       const response = await axios.get(
-        `http://localhost:3020/api/scraper/cementos`
+        `http://localhost:3020/api/scraper/acero/${diameter}`
       );
       setAlertMessage(response.data.message);
 
       const jsonResponse = await axios.get(
         `http://localhost:3020/json/${response.data.fileName}`
       );
-      // setResult(response.data.productos);
+
       setResult(jsonResponse.data);
       console.log(response);
     } catch (error) {
       console.error("Error en el scraping:", error);
-      setAlertMessage("Error al realizar el scraping."); // Mostrar mensaje de error
+      setAlertMessage("Error al realizar el scraping.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSelectChange = (event) => {
+    setDiameter(event.target.value);
   };
 
   return (
@@ -55,7 +60,24 @@ const CementosPage = () => {
         </Alert>
       )}
       <div className={styles.containerTitle}>
-        <h1>Extraccion de datos de Cemento</h1>
+        <h1>Extraccion de datos de Hierros Aletados</h1>
+      </div>
+      <div className={styles.containerSelect}>
+        <label htmlFor="diameters">Selecciona un diametro:</label>
+        <select
+          id="diameters"
+          name="diameters"
+          value={diameter}
+          onChange={handleSelectChange}
+        >
+          <option value="6">Ø6</option>
+          <option value="8">Ø8</option>
+          <option value="10">Ø10</option>
+          <option value="12">Ø12</option>
+          <option value="16">Ø16</option>
+          <option value="20">Ø20</option>
+          <option value="25">Ø25</option>
+        </select>
       </div>
       <div className={styles.containerButtonsScraping}>
         <button
@@ -82,25 +104,19 @@ const CementosPage = () => {
             <h2>Resultados del Scraping:</h2>
           </div>
           <ul className={styles.containerDataScraping}>
-            {result.map((producto, index) => (
-              <li key={index} className={styles.containerProductScraping}>
-                <p>{capitalizeFirstLetter(producto.empresa)}</p>
-                <p>{capitalizeFirstLetter(producto.nombre)}</p>
-                <p>
-                  $
-                  {parseFloat(
-                    producto.precio
-                      .replace(/[^\d,.-]/g, "") // Elimina todo excepto números, puntos y comas
-                      .replace(".", "") // Elimina los puntos (separadores de miles)
-                      .replace(",", ".") // Reemplaza la coma por un punto decimal
-                  ).toLocaleString("es-AR", {
-                    // Usamos 'es-AR' para el formato argentino
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </p>
-              </li>
-            ))}
+            {result.map((producto, index) => {
+              // Verificamos si el producto es null
+              if (producto) {
+                return (
+                  <li key={index} className={styles.containerProductScraping}>
+                    <p>{capitalizeFirstLetter(producto.supplier)}</p>
+                    <p>{capitalizeFirstLetter(producto.name)}</p>
+                    <p>$ {producto.price}</p>
+                  </li>
+                );
+              }
+              return null; // Si el producto es null, no renderizamos nada para ese ítem
+            })}
           </ul>
         </div>
       ) : (
@@ -114,4 +130,4 @@ const CementosPage = () => {
   );
 };
 
-export default CementosPage;
+export default AcerosPage;
