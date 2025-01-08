@@ -18,6 +18,12 @@
   font-size: 2.5rem;
 }
 
+.containerLoadingData {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
 .containerSelect {
   display: flex;
   flex-direction: row;
@@ -67,3 +73,161 @@
   border: none;
   font-weight: 600;
 }
+
+.containerData {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gridItem {
+  margin-bottom: 30px;
+}
+
+.gridItem.noProveedor {
+  width: 75%;
+}
+
+.gridItem > h3 {
+  border: 1px black solid;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Tres columnas por defecto */
+
+  column-gap: 10px;
+}
+
+.gridContainer.noProveedor {
+  grid-template-columns: repeat(2, 1fr); /* Dos columnas si no hay proveedor */
+}
+
+.containerTitleColumn1,
+.containerTitleColumn2,
+.containerTitleColumn3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px #d5d5d5 solid;
+}
+
+.containerTitleColumn1 > h3,
+.containerTitleColumn2 > h3,
+.containerTitleColumn3 > h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.containerTitleColumn1 {
+  grid-column: 1 / 2;
+}
+
+.containerTitleColumn1Hidden {
+  display: none; /* Oculta la columna de empresa si no hay datos */
+}
+
+.containerTitleColumn2 {
+  grid-column: 2 / 3;
+}
+
+.containerTitleColumn2Shifted {
+  grid-column: 1 / 2; /* Ajusta la columna Fecha para ocupar el lugar de Empresa */
+}
+
+.containerTitleColumn3 {
+  grid-column: 3 / 4;
+}
+.containerTitleColumn3Shifted {
+  grid-column: 2 / 3; /* Ajusta la columna Precio para ocupar el lugar de Empresa */
+}
+
+.supplierColumn {
+  text-align: center;
+}
+
+/* .datesRow,
+.pricesRow,
+.supplierRow {
+  display: grid;
+
+} */
+
+/* .datesRow.noProveedor,
+.pricesRow.noProveedor {
+  grid-template-columns: repeat(2, 1fr);
+} */
+
+.datesRow.noProveedor {
+  grid-column: 1 / 2;
+}
+
+.supplierColumn {
+  grid-column: 1 / 2;
+}
+
+.dateColumn {
+  grid-column: 2 / 3; /* Por defecto en la columna de Fecha */
+}
+
+.dateColumn.noProveedor {
+  grid-column: 1 / 2; /* Si no hay Proveedor, mueve Fecha a la primera columna */
+}
+
+.priceColumn {
+  grid-column: 3 / 4; /* Por defecto en la columna de Precio */
+}
+
+.priceColumn.noProveedor {
+  grid-column: 2 / 3; /* Si no hay Proveedor, mueve Precio a la segunda columna */
+}
+
+.datesRow {
+  /* margin-top: 10px; */
+  font-weight: normal; /* No negrita para las fechas */
+}
+
+.proveedor {
+  grid-column: 1 / -1;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.dateColumn,
+.priceColumn,
+.supplierColumn {
+  text-align: center;
+}
+
+/* .pricesRow {
+  margin-top: 10px;
+} */
+
+h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.containerNoSelection {
+  display: flex;
+  justify-content: center;
+}
+
+.containerNoSelection > p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding-top: 8rem;
+}
+
+/* .supplierRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.supplierRow.noProveedor {
+  grid-template-columns: 1fr 1fr; 
+} */

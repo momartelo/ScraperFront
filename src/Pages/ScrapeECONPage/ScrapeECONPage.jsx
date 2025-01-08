@@ -42,6 +42,32 @@ const ScrapeECONPage = () => {
     zingueria: "https://econ.ar/productos/zingueria/",
   };
 
+  const displayNames = {
+    aceros: "Aceros",
+    aceros_Inoxidables: "Aceros Inoxidables",
+    aislaciones: "Aislaciones",
+    amoblamientos: "Amoblamientos",
+    carpinterias: "Carpinterias",
+    construccion_en_seco: "Construccion en Seco",
+    construcciones_especiales: "Construcciones Especiales",
+    electricidad: "Electricidad",
+    electro: "Electro",
+    ferreteria: "Ferreteria",
+    fibra_de_vidrio: "Fibra de Vidrio",
+    jardineria: "Jardineria",
+    maderas: "Maderas",
+    marmoles_granitos: "Marmoles y Granitos",
+    obra_gruesa: "Obra Gruesa",
+    pinturas: "Pinturas",
+    pisos_y_revestimientos: "Pisos y Revestimientos",
+    refrigeracion: "Refrigeracion",
+    sanitarios_y_griferias: "Sanitarios y Griferias",
+    techos: "Techos",
+    vidrios: "Vidrios",
+    yeseria: "Yeseria",
+    zingueria: "Zingueria",
+  };
+
   useEffect(() => {
     let filtered = result.filter((r) => {
       return r.nombre.toLowerCase().includes(search.toLowerCase());
@@ -57,8 +83,11 @@ const ScrapeECONPage = () => {
   };
 
   const handleScrape = async () => {
-    setLoading(true);
+    setResult([]);
+    setFilterResults([]);
     setAlertMessage("");
+    setLoading(true);
+
     try {
       const response = await axios.get(
         `http://localhost:3020/api/scraper/ECON/${selectedUrl}`
@@ -106,7 +135,8 @@ const ScrapeECONPage = () => {
           </option>
           {Object.keys(urls).map((key) => (
             <option key={key} value={key}>
-              {key.charAt(0).toUpperCase() + key.slice(1)}
+              {displayNames[key]}
+              {/* {key.charAt(0).toUpperCase() + key.slice(1)} */}
             </option>
           ))}
         </select>
@@ -142,6 +172,14 @@ const ScrapeECONPage = () => {
         </div>
       </div>
 
+      {/* Cargando Overlay */}
+      {loading && (
+        <div className={styles.loadingOverlay}>
+          <div className={styles.spinner}></div>
+          <p>Loading...</p>
+        </div>
+      )}
+
       {filterResults.length > 0 ? (
         <div className={styles.containerScraping}>
           <div className={styles.containerTitleScraping}>
@@ -157,7 +195,8 @@ const ScrapeECONPage = () => {
           </ul>
         </div>
       ) : (
-        result && (
+        !loading &&
+        result.length === 0 && (
           <div className={styles.containerNoDataScraping}>
             <h2>No hay productos disponibles.</h2>
           </div>
