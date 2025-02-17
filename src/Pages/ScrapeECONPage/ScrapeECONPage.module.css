@@ -178,7 +178,7 @@
   width: 28px;
 }
 
-.loadingOverlay {
+/* .loadingOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -188,9 +188,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999; /* Para que quede por encima de todos los elementos */
-}
+  z-index: 9999; 
+  gap: 1rem;
+} */
 
+/* .loadingOverlay > p {
+  margin-left: 1rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+  z-index: 100000;
+  color: black;
+} */
+
+/* styles.css (ScrapeECONPage.module.css) */
+
+/* Spinner */
+/* styles.css (ScrapeECONPage.module.css) */
+
+/* Spinner */
 .spinner {
   border: 4px solid rgba(255, 255, 255, 0.3); /* Fondo */
   border-top: 4px solid white;
@@ -208,4 +223,43 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Estilo de la capa que cubre la pantalla */
+.loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* Asegura que el overlay esté por encima de todo */
+}
+
+/* Animación para el texto "Loading Data..." */
+.loadingText {
+  font-size: 16px; /* Tamaño de la fuente del texto */
+  font-weight: bold;
+  color: black;
+  display: inline-block;
+  margin-left: 10px; /* Espacio entre el texto y los puntos */
+  position: relative;
+  z-index: 1; /* Asegura que el texto esté sobre el fondo */
+  line-height: 1; /* Establece la misma altura de línea para evitar desplazamientos verticales */
+  vertical-align: middle; /* Alinea el texto verticalmente con los puntos */
+}
+
+/* Clase para los puntos */
+.dots {
+  font-size: 16px; /* Asegura que el tamaño de la fuente sea igual al del texto */
+  color: black; /* Color blanco para los puntos */
+  display: inline-block;
+  position: absolute; /* Los puntos van en la misma línea del texto */
+  left: 105px; /* Ajusta la distancia para que los puntos queden bien alineados */
+  z-index: 2;
+  line-height: 1; /* Igual que el texto para evitar desalineación */
+  vertical-align: middle; /* Asegura que los puntos estén alineados con el texto */
 }

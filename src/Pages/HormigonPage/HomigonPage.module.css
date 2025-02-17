@@ -137,7 +137,7 @@
   display: flex;
   width: 20%;
   min-width: 200px;
-  height: 120px;
+  height: 150px;
   flex-direction: column;
   text-align: center;
   row-gap: 0.5rem;
@@ -151,6 +151,11 @@
   font-size: 0.9rem;
 }
 
+.containerProductScraping > p:nth-child(1) {
+  font-weight: 800;
+  text-decoration: underline;
+}
+
 .containerProductScraping > p:nth-child(2) {
   padding-top: 0.5rem;
 }
@@ -158,6 +163,7 @@
 .containerProductScraping > p:nth-child(3) {
   margin-top: auto;
   font-weight: 800;
+  margin-bottom: 10px;
 }
 
 .containerNoDataScraping {

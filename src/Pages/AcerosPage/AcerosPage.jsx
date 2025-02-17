@@ -24,6 +24,7 @@ const AcerosPage = () => {
   const handleScrape = async () => {
     setLoading(true);
     setAlertMessage("");
+    setResult([]);
     try {
       const response = await axios.get(
         `http://localhost:3020/api/scraper/acero/${diameter}`
@@ -98,7 +99,11 @@ const AcerosPage = () => {
           Volver
         </Link>
       </div>
-      {result.length > 0 ? (
+      {loading ? (
+        <div className={styles.containerWaitingScraping}>
+          <h2>Esperando resultados...</h2>
+        </div>
+      ) : result.length > 0 ? (
         <div className={styles.containerScraping}>
           <div className={styles.containerTitleScraping}>
             <h2>Resultados del Scraping:</h2>

@@ -32,7 +32,7 @@ const HormigonPage = () => {
       const jsonResponse = await axios.get(
         `http://localhost:3020/json/${response.data.fileName}`
       );
-      //   console.log(jsonResponse);
+      console.log(jsonResponse);
       // setResult(response.data.productos);
       setResult(jsonResponse.data);
     } catch (error) {
@@ -84,7 +84,7 @@ const HormigonPage = () => {
           <ul className={styles.containerDataScraping}>
             {result.map((producto, index) => (
               <li key={index} className={styles.containerProductScraping}>
-                <p>{capitalizeFirstLetter(producto.empresa)}</p>
+                <p>{capitalizeFirstLetter(producto.proveedor)}</p>
                 <p>{capitalizeFirstLetter(producto.nombre)}</p>
                 <p>
                   $

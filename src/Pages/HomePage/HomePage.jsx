@@ -56,7 +56,7 @@ const HomePage = () => {
           <Link className={styles.buttonScrapping} to={"/acero"}>
             Scraping
           </Link>
-          <Link className={styles.buttonData} to={"/graficos/precioAcero"}>
+          <Link className={styles.buttonData} to={"/graficos/Acero"}>
             Ver datos
           </Link>
         </div>

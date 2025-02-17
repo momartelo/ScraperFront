@@ -8,7 +8,9 @@ const DataECONPage = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
   const [error, setError] = useState(null);
-  const [showLoading, setShowLoading] = useState(false);
+  // const [showLoading, setShowLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filterResults, setFilterResults] = useState([]);
 
   const navigate = useNavigate();
 
@@ -65,24 +67,84 @@ const DataECONPage = () => {
     zingueria: "Zingueria",
   };
 
+  useEffect(() => {
+    if (search === "") {
+      // Agrupar los productos por nombre
+      const groupedProducts = Object.keys(data).reduce((acc, key) => {
+        const products = data[key];
+        const groupedByName = products.reduce((group, product) => {
+          // Asegurarse de que el proveedor esté definido
+          const proveedor = product.proveedor
+            ? product.proveedor
+            : "No disponible";
+
+          // Si el producto ya existe en el grupo, añadir la fecha, precio y proveedor
+          if (!group[product.nombre]) {
+            group[product.nombre] = [];
+          }
+          group[product.nombre].push({
+            fecha: product.fecha,
+            precio: product.precio,
+            proveedor: proveedor, // Añadimos el proveedor aquí
+          });
+          return group;
+        }, {});
+
+        // Unir los productos agrupados
+        return { ...acc, ...groupedByName };
+      }, {});
+
+      setFilterResults(groupedProducts);
+    } else {
+      // Filtrar y agrupar los productos por nombre con la búsqueda
+      const filtered = Object.keys(data).reduce((acc, key) => {
+        const products = data[key].filter((product) =>
+          product.nombre.toLowerCase().includes(search.toLowerCase())
+        );
+        const groupedByName = products.reduce((group, product) => {
+          const proveedor = product.proveedor
+            ? product.proveedor
+            : "No disponible"; // Asignar "No disponible" si no hay proveedor
+
+          if (!group[product.nombre]) {
+            group[product.nombre] = [];
+          }
+          group[product.nombre].push({
+            fecha: product.fecha,
+            precio: product.precio,
+            proveedor: proveedor, // Añadimos el proveedor aquí
+          });
+          return group;
+        }, {});
+        return { ...acc, ...groupedByName };
+      }, {});
+
+      setFilterResults(filtered);
+    }
+  }, [search, data]);
+
   const handleData = async (Url) => {
     setLoading(true);
     setError(null);
-    setShowLoading(true);
+    // setShowLoading(true);
+    setData({});
 
     try {
       const response = await axios.get(
         `http://localhost:3020/api/graphics/productosECON_${Url}`
       );
       console.log("Respuesta", response.data);
+      console.log(response);
       console.log("URL Seleccionada", selectedUrl);
       setData(response.data);
+      setFilterResults(response.data);
     } catch (error) {
-      setError(error.nessage);
+      setError(error.message);
     } finally {
-      setLoading(false);
+      // setLoading(false);
+      // setShowLoading(false);
       setTimeout(() => {
-        setShowLoading(false);
+        setLoading(false);
       }, 2000);
     }
   };
@@ -114,11 +176,11 @@ const DataECONPage = () => {
           <h1>Precios de Materiales</h1>
         </div>
       </div>
-      {showLoading && (
+      {/* {loading && (
         <div className={styles.containerLoadingData}>
           <p>Cargando Datos...</p>
         </div>
-      )}
+      )} */}
       {error && <p style={{ color: "red" }}>Error: {error}</p>}
       <div className={styles.containerSelect}>
         <select
@@ -147,135 +209,57 @@ const DataECONPage = () => {
           Volver
         </Link>
       </div>
-      {!showLoading && (
+
+      {filterResults && Object.keys(filterResults).length > 0 && (
+        <div className={`${styles.searchContainer}`}>
+          <input
+            type="search"
+            className={styles.formControl}
+            placeholder="Search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <div className={styles.containerIcon}>
+            <img src="../../../public/img/buscarRelleno.png" alt="" />
+          </div>
+        </div>
+      )}
+      {loading ? (
+        <div className={styles.containerLoadingDataPrincipal}>
+          <p>Esperando los datos...</p>
+        </div>
+      ) : filterResults && Object.keys(filterResults).length === 0 ? (
+        <div className={styles.noMaterialsContainer}>
+          <p>¡No hay materiales disponibles!</p>
+        </div>
+      ) : (
         <div className={styles.containerData}>
-          {Object.keys(data).length > 0
-            ? Object.keys(data).map((productKey, productIndex) => {
-                const productData = data[productKey];
-                const hasProveedor = productData.some((item) => item.proveedor);
-                return (
-                  <div
-                    key={productIndex}
-                    className={`${styles.gridItem} ${
-                      hasProveedor ? "" : styles.noProveedor
-                    }`}
-                  >
-                    <h3>{capitalizeFirstLetter(productKey)}</h3>
-                    <div
-                      className={`${styles.gridContainer} ${
-                        hasProveedor ? "" : styles.noProveedor
-                      }`}
-                    >
-                      <div
-                        className={
-                          hasProveedor
-                            ? styles.containerTitleColumn1
-                            : styles.containerTitleColumn1Hidden
-                        }
-                      >
-                        {hasProveedor && <h3>Proveedor</h3>}
-                      </div>
-                      <div
-                        className={
-                          hasProveedor
-                            ? styles.containerTitleColumn2
-                            : styles.containerTitleColumn2Shifted
-                        }
-                      >
-                        <h3>Fecha</h3>
-                      </div>
-                      <div
-                        className={
-                          hasProveedor
-                            ? styles.containerTitleColumn3
-                            : styles.containerTitleColumn3Shifted
-                        }
-                      >
-                        <h3>Precio</h3>
-                      </div>
-
-                      {hasProveedor && (
-                        <div className={styles.proveedor}>
-                          <p>
-                            {capitalizeFirstLetter(productData[0].proveedor)}
-                          </p>
-                        </div>
-                      )}
-                      <div
-                        className={`${styles.supplierRow} ${
-                          hasProveedor ? "" : styles.noProveedor
-                        }`}
-                      >
-                        {productData.map((item, index) => (
-                          <div
-                            key={`supplier-${index}`}
-                            className={`${styles.supplierColumn} ${
-                              hasProveedor ? "" : styles.noProveedor
-                            }`}
-                          >
-                            {hasProveedor && (
-                              <div className={styles.proveedor}>
-                                <p>
-                                  {capitalizeFirstLetter(item.proveedor) ||
-                                    "No disponible"}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* {item.proveedor} */}
-                          </div>
-                        ))}
-                      </div>
-                      <div
-                        className={`${styles.datesRow} ${
-                          hasProveedor ? "" : styles.noProveedor
-                        }`}
-                      >
-                        {productData.map((item, index) => (
-                          <div
-                            key={`date-${index}`}
-                            className={`${styles.dateColumn} ${
-                              hasProveedor ? "" : styles.noProveedor
-                            }`}
-                          >
-                            {ordenedDate(item.fecha)}
-                          </div>
-                        ))}
-                      </div>
-                      <div
-                        className={`${styles.pricesRow} ${
-                          hasProveedor ? "" : styles.noProveedor
-                        }`}
-                      >
-                        {productData.map((item, index) => (
-                          <div
-                            key={`price-${index}`}
-                            className={`${styles.priceColumn} ${
-                              hasProveedor ? "" : styles.noProveedor
-                            }`}
-                          >
-                            ${" "}
-                            {parseFloat(
-                              item.precio
-                                .replace(/[^\d,.-]/g, "")
-                                .replace(".", "")
-                                .replace(",", ".")
-                            ).toLocaleString("es-AR", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            : !loading && (
-                <div className={styles.containerNoSelection}>
-                  <p>¡No se encontraron datos en la categoria seleccionada!</p>
+          <ul className={styles.containerDataScraping}>
+            {Object.keys(filterResults).map((productName, index) => (
+              <li key={index} className={styles.containerProductScraping}>
+                <p>{productName}</p> {/* Mostrar el nombre del producto */}
+                <div className={styles.productDetailsHeaders}>
+                  <p>Proveedor</p>
+                  <p>Fecha</p>
+                  <p>Precio</p>
                 </div>
-              )}
+                {filterResults[productName].map((product, idx) => {
+                  return (
+                    <div key={idx} className={styles.productDetails}>
+                      <p>
+                        {product.proveedor && product.proveedor.trim() !== ""
+                          ? product.proveedor
+                          : "No disponible"}
+                      </p>
+                      <p>{ordenedDate(product.fecha)}</p>
+                      <p>${product.precio}</p>
+                    </div>
+                  );
+                })}
+                <hr className={styles.separatorLine} />
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
@@ -283,3 +267,135 @@ const DataECONPage = () => {
 };
 
 export default DataECONPage;
+
+// {!showLoading && (
+//   <div className={styles.containerData}>
+//     {Object.keys(data).length > 0
+//       ? Object.keys(data).map((productKey, productIndex) => {
+//           const productData = data[productKey];
+//           const hasProveedor = productData.some((item) => item.proveedor);
+//           return (
+//             <div
+//               key={productIndex}
+//               className={`${styles.gridItem} ${
+//                 hasProveedor ? "" : styles.noProveedor
+//               }`}
+//             >
+//               <h3>{capitalizeFirstLetter(productKey)}</h3>
+//               <div
+//                 className={`${styles.gridContainer} ${
+//                   hasProveedor ? "" : styles.noProveedor
+//                 }`}
+//               >
+//                 <div
+//                   className={
+//                     hasProveedor
+//                       ? styles.containerTitleColumn1
+//                       : styles.containerTitleColumn1Hidden
+//                   }
+//                 >
+//                   {hasProveedor && <h3>Proveedor</h3>}
+//                 </div>
+//                 <div
+//                   className={
+//                     hasProveedor
+//                       ? styles.containerTitleColumn2
+//                       : styles.containerTitleColumn2Shifted
+//                   }
+//                 >
+//                   <h3>Fecha</h3>
+//                 </div>
+//                 <div
+//                   className={
+//                     hasProveedor
+//                       ? styles.containerTitleColumn3
+//                       : styles.containerTitleColumn3Shifted
+//                   }
+//                 >
+//                   <h3>Precio</h3>
+//                 </div>
+
+//                 {hasProveedor && (
+//                   <div className={styles.proveedor}>
+//                     <p>
+//                       {capitalizeFirstLetter(productData[0].proveedor)}
+//                     </p>
+//                   </div>
+//                 )}
+//                 <div
+//                   className={`${styles.supplierRow} ${
+//                     hasProveedor ? "" : styles.noProveedor
+//                   }`}
+//                 >
+//                   {productData.map((item, index) => (
+//                     <div
+//                       key={`supplier-${index}`}
+//                       className={`${styles.supplierColumn} ${
+//                         hasProveedor ? "" : styles.noProveedor
+//                       }`}
+//                     >
+//                       {hasProveedor && (
+//                         <div className={styles.proveedor}>
+//                           <p>
+//                             {capitalizeFirstLetter(item.proveedor) ||
+//                               "No disponible"}
+//                           </p>
+//                         </div>
+//                       )}
+
+//                       {/* {item.proveedor} */}
+//                     </div>
+//                   ))}
+//                 </div>
+//                 <div
+//                   className={`${styles.datesRow} ${
+//                     hasProveedor ? "" : styles.noProveedor
+//                   }`}
+//                 >
+//                   {productData.map((item, index) => (
+//                     <div
+//                       key={`date-${index}`}
+//                       className={`${styles.dateColumn} ${
+//                         hasProveedor ? "" : styles.noProveedor
+//                       }`}
+//                     >
+//                       {ordenedDate(item.fecha)}
+//                     </div>
+//                   ))}
+//                 </div>
+//                 <div
+//                   className={`${styles.pricesRow} ${
+//                     hasProveedor ? "" : styles.noProveedor
+//                   }`}
+//                 >
+//                   {productData.map((item, index) => (
+//                     <div
+//                       key={`price-${index}`}
+//                       className={`${styles.priceColumn} ${
+//                         hasProveedor ? "" : styles.noProveedor
+//                       }`}
+//                     >
+//                       ${" "}
+//                       {parseFloat(
+//                         item.precio
+//                           .replace(/[^\d,.-]/g, "")
+//                           .replace(".", "")
+//                           .replace(",", ".")
+//                       ).toLocaleString("es-AR", {
+//                         minimumFractionDigits: 2,
+//                         maximumFractionDigits: 2,
+//                       })}
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+//             </div>
+//           );
+//         })
+//       : !loading && (
+//           <div className={styles.containerNoSelection}>
+//             <p>¡No se encontraron datos en la categoria seleccionada!</p>
+//           </div>
+//         )}
+//   </div>
+// )}

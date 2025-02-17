@@ -11,6 +11,7 @@ const ScrapeECONPage = () => {
   const [search, setSearch] = useState("");
   const [filterResults, setFilterResults] = useState([]);
   const [alertMessage, setAlertMessage] = useState("");
+  const [dots, setDots] = useState(".");
 
   const navigate = useNavigate();
 
@@ -67,6 +68,22 @@ const ScrapeECONPage = () => {
     yeseria: "Yeseria",
     zingueria: "Zingueria",
   };
+
+  useEffect(() => {
+    if (loading) {
+      const interval = setInterval(() => {
+        setDots((prevDots) => {
+          if (prevDots.length < 3) {
+            return prevDots + ".";
+          } else {
+            return ".";
+          }
+        });
+      }, 500); // Cambiar cada 500 ms
+
+      return () => clearInterval(interval); // Limpiar el intervalo cuando el componente se desmonte
+    }
+  }, [loading]);
 
   useEffect(() => {
     let filtered = result.filter((r) => {
@@ -173,12 +190,17 @@ const ScrapeECONPage = () => {
       </div>
 
       {/* Cargando Overlay */}
-      {loading && (
-        <div className={styles.loadingOverlay}>
-          <div className={styles.spinner}></div>
-          <p>Loading...</p>
-        </div>
-      )}
+      <div>
+        {loading && (
+          <div className={styles.loadingOverlay}>
+            <div className={styles.spinner}></div>
+            <p className={styles.loadingText}>
+              Loading Data
+              <span className={styles.dots}>{dots}</span>
+            </p>
+          </div>
+        )}
+      </div>
 
       {filterResults.length > 0 ? (
         <div className={styles.containerScraping}>

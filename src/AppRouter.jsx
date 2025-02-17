@@ -8,6 +8,7 @@ import DataPage from "./Pages/DataPage/DataPage";
 import HormigonPage from "./Pages/HormigonPage/HormigonPage";
 import AcerosPage from "./Pages/AcerosPage/AcerosPage";
 import DataECONPage from "./Pages/ScrapeECONPage/DataECONPage";
+import DataAcero from "./Pages/AcerosPage/DataAcero";
 
 function AppRouter() {
   return (
@@ -19,6 +20,7 @@ function AppRouter() {
       <Route path="/hormigon" element={<HormigonPage />} />
       <Route path="/graficos/:category" element={<DataPage />} />
       <Route path="/graficos/ECON" element={<DataECONPage />} />
+      <Route path="/graficos/Acero" element={<DataAcero />} />
       <Route path="/acero" element={<AcerosPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
