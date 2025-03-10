@@ -42,7 +42,7 @@ const DataAcero = () => {
     setShowLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:3020/api/graphics/precioAcero_${diametro}`
+        `http://localhost:3020/api/data/precioAcero_${diametro}`
       );
       console.log("Respuesta", response.data);
 

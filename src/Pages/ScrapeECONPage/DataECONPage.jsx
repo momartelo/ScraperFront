@@ -131,7 +131,7 @@ const DataECONPage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:3020/api/graphics/productosECON_${Url}`
+        `http://localhost:3020/api/data/productosECON_${Url}`
       );
       console.log("Respuesta", response.data);
       console.log(response);

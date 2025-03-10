@@ -28,7 +28,7 @@
   align-items: center;
   column-gap: 1rem;
   row-gap: 1rem;
-  width: 60%;
+  width: 80%;
 }
 
 .anchor {
@@ -45,9 +45,9 @@
 
 .buttonScrapping {
   height: 40px;
-  width: 100px;
+  width: 150px;
   padding: 0.5rem;
-  background-color: #007bff;
+  background-color: #0975da;
   color: #f5f5f5;
   font-weight: 400;
   border-radius: 8px;
@@ -58,7 +58,7 @@
 }
 
 .buttonScrapping:hover {
-  background-color: #0056b3;
+  background-color: #044386;
   color: #f5f5f5;
   border: none;
   font-weight: 600;
@@ -67,8 +67,8 @@
 .buttonData {
   height: 40px;
   padding: 0.5rem;
-  width: 100px;
-  background-color: #20ad00;
+  width: 150px;
+  background-color: #13a00fd3;
   color: #f5f5f5;
   font-weight: 400;
   border-radius: 8px;
@@ -78,7 +78,27 @@
 }
 
 .buttonData:hover {
-  background-color: #198754;
+  background-color: #06610a;
+  color: #f5f5f5;
+  border: none;
+  font-weight: 600;
+}
+
+.buttonGraphic {
+  height: 40px;
+  padding: 0.5rem;
+  width: 150px;
+  background-color: #df561f;
+  color: #f5f5f5;
+  font-weight: 400;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonGraphic:hover {
+  background-color: #882b06;
   color: #f5f5f5;
   border: none;
   font-weight: 600;

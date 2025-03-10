@@ -13,6 +13,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Checkbox, Divider } from "antd";
+import {
+  capitalizeFirstLetter,
+  formatPrice,
+  ordenedDate,
+} from "../../functions/generalFunctions";
 
 const DataPage = () => {
   const { category } = useParams();
@@ -30,7 +35,7 @@ const DataPage = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:3020/api/graphics/${category}`
+        `http://localhost:3020/api/data/${category}`
       );
       setData(response.data);
     } catch (err) {
@@ -40,15 +45,15 @@ const DataPage = () => {
     }
   };
 
-  const capitalizeFirstLetter = (text) => {
-    if (!text) return text;
-    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-  };
+  // const capitalizeFirstLetter = (text) => {
+  //   if (!text) return text;
+  //   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+  // };
 
-  const ordenedDate = (date) => {
-    if (!date) return date;
-    return date.slice(6) + "/" + date.slice(4, 6) + "/" + date.slice(0, 4);
-  };
+  // const ordenedDate = (date) => {
+  //   if (!date) return date;
+  //   return date.slice(6) + "/" + date.slice(4, 6) + "/" + date.slice(0, 4);
+  // };
 
   useEffect(() => {
     if (category) {
@@ -97,9 +102,9 @@ const DataPage = () => {
     }));
   };
 
-  const formatPrice = (value) => {
-    return `$${value.toLocaleString()}`; // Formatea el valor con el signo de pesos y separador de miles
-  };
+  // const formatPrice = (value) => {
+  //   return `$${value.toLocaleString()}`; // Formatea el valor con el signo de pesos y separador de miles
+  // };
 
   const getYAxisDomain = (data) => {
     const prices = data.map((item) => item.precioParaGrafico); // Suponiendo que "precioParaGrafico" es el campo de los precios.
@@ -292,6 +297,9 @@ const DataPage = () => {
                         <YAxis
                           tick={{ fontSize: 12 }}
                           domain={getYAxisDomain(chartData)}
+                          tickFormatter={(value) =>
+                            `$${value.toLocaleString("es-AR")}`
+                          }
                         />
                         <Tooltip content={<CustomTooltip />} />
 
